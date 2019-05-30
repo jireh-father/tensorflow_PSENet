@@ -158,6 +158,9 @@ def main(argv=None):
     except OSError as e:
         if e.errno != 17:
             raise
+            
+    if not os.path.isdir(os.path.join(FLAGS.output_dir, "crop")):
+        os.makedirs(os.path.join(FLAGS.output_dir, "crop")
 
     with tf.get_default_graph().as_default():
         input_images = tf.placeholder(tf.float32, shape=[None, None, None, 3], name='input_images')
@@ -261,7 +264,7 @@ def main(argv=None):
                             rt_y -= padding
                             rb_x += padding
                             rb_y += padding
-                            crop_img = im[lt_y:lb_y, lt_x:rt_x]    
+                            crop_img = im[int(lt_y):int(lb_y), int(lt_x):int(rt_x)]    
                             cv2.imshow(os.path.join(FLAGS.output_dir, os.path.basename(im_fn) + "_%d" % i), crop_img)
                     
                 if not FLAGS.no_write_images:
