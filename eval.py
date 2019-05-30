@@ -173,7 +173,7 @@ def main(argv=None):
             saver.restore(sess, FLAGS.checkpoint_path)
 
             
-            _list = get_images()
+            im_fn_list = get_images()
             for im_fn in im_fn_list:
                 im = cv2.imread(im_fn)[:, :, ::-1]
                 logger.debug('image file:{}'.format(im_fn))
