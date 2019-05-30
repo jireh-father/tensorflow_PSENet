@@ -172,7 +172,8 @@ def main(argv=None):
             logger.info('Restore from {}'.format(model_path))
             saver.restore(sess, model_path)
 
-            im_fn_list = get_images()
+            
+            _list = get_images()
             for im_fn in im_fn_list:
                 im = cv2.imread(im_fn)[:, :, ::-1]
                 logger.debug('image file:{}'.format(im_fn))
@@ -227,14 +228,41 @@ def main(argv=None):
                             f.write('{},{},{},{},{},{},{},{}\r\n'.format(
                                 box[0, 0], box[0, 1], box[1, 0], box[1, 1], box[2, 0], box[2, 1], box[3, 0], box[3, 1]))
                             cv2.polylines(im[:, :, ::-1], [box.astype(np.int32).reshape((-1, 1, 2))], True, color=(255, 255, 0), thickness=2)
-                    lt_x = box[2, 0]
-                    lt_y = box[2, 1]
-                    rt_x = box[3, 0]
-                    rt_y = box[3, 1]
-                    lb_x = box[1, 0]
-                    lb_y = box[1, 1]
-                    rb_x = box[0, 0]   
-                    rb_y = box[0, 1]
+                            lt_x = box[2, 0]
+                            lt_y = box[2, 1]
+                            rt_x = box[3, 0]
+                            rt_y = box[3, 1]
+                            lb_x = box[1, 0]
+                            lb_y = box[1, 1]
+                            rb_x = box[0, 0]   
+                            rb_y = box[0, 1]
+                            if lt_x > lb_x:
+                                lt_x = lb_x
+                            if lt_y > rt_y:
+                                lt_y = rt_y
+                            if rt_x < rb_x:
+                                rt_x = rb_x
+                            if rt_y > lt_y:
+                                rt_y = lt_y
+                            if lb_x > lt_x:
+                                lb_x = lt_x
+                            if lb_y > rb_y:
+                                lb_y = rb_y
+                            if rb_x < rt_x:
+                                rb_x = rt_x
+                            if rb_y < lb_y:
+                                rb_y = lb_y
+                            padding = 13
+                            lt_x -= padding
+                            lt_y -= padding
+                            lb_x -= padding
+                            lb_y += padding
+                            rt_x += padding
+                            rt_y -= padding
+                            rb_x += padding
+                            rb_y += padding
+                            crop_img = im[lt_y:lb_y, lt_x:rt_x]    
+                            cv2.imshow(os.path.join(FLAGS.output_dir, os.path.basename(im_fn) + "_%d" % i), crop_img)
                     
                 if not FLAGS.no_write_images:
                     img_path = os.path.join(FLAGS.output_dir, os.path.basename(im_fn))
