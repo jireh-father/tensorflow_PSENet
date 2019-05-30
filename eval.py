@@ -160,7 +160,7 @@ def main(argv=None):
             raise
             
     if not os.path.isdir(os.path.join(FLAGS.output_dir, "crop")):
-        os.makedirs(os.path.join(FLAGS.output_dir, "crop")
+        os.makedirs(os.path.join(FLAGS.output_dir, "crop"))
 
     with tf.get_default_graph().as_default():
         input_images = tf.placeholder(tf.float32, shape=[None, None, None, 3], name='input_images')
