@@ -265,7 +265,7 @@ def main(argv=None):
                             rb_x += padding
                             rb_y += padding
                             crop_img = im[int(lt_y):int(lb_y), int(lt_x):int(rt_x)]    
-                            cv2.imwrite(os.path.join(FLAGS.output_dir, "crop", os.path.basename(im_fn) + "_%d" % i), crop_img)
+                            cv2.imwrite(os.path.join(FLAGS.output_dir, "crop", ("%d_" % i) + os.path.basename(im_fn)), crop_img)
                     
                 if not FLAGS.no_write_images:
                     img_path = os.path.join(FLAGS.output_dir, os.path.basename(im_fn))
