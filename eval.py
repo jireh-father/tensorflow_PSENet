@@ -227,6 +227,15 @@ def main(argv=None):
                             f.write('{},{},{},{},{},{},{},{}\r\n'.format(
                                 box[0, 0], box[0, 1], box[1, 0], box[1, 1], box[2, 0], box[2, 1], box[3, 0], box[3, 1]))
                             cv2.polylines(im[:, :, ::-1], [box.astype(np.int32).reshape((-1, 1, 2))], True, color=(255, 255, 0), thickness=2)
+                    lt_x = box[2, 0]
+                    lt_y = box[2, 1]
+                    rt_x = box[3, 0]
+                    rt_y = box[3, 1]
+                    lb_x = box[1, 0]
+                    lb_y = box[1, 1]
+                    rb_x = box[0, 0]   
+                    rb_y = box[0, 1]
+                    
                 if not FLAGS.no_write_images:
                     img_path = os.path.join(FLAGS.output_dir, os.path.basename(im_fn))
                     cv2.imwrite(img_path, im[:, :, ::-1])
