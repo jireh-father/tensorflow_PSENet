@@ -167,10 +167,10 @@ def main(argv=None):
         variable_averages = tf.train.ExponentialMovingAverage(0.997, global_step)
         saver = tf.train.Saver(variable_averages.variables_to_restore())
         with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
-            ckpt_state = tf.train.get_checkpoint_state(FLAGS.checkpoint_path)
-            model_path = os.path.join(FLAGS.checkpoint_path, os.path.basename(ckpt_state.model_checkpoint_path))
-            logger.info('Restore from {}'.format(model_path))
-            saver.restore(sess, model_path)
+  #          ckpt_state = tf.train.get_checkpoint_state(FLAGS.checkpoint_path)
+ #           model_path = os.path.join(FLAGS.checkpoint_path, os.path.basename(ckpt_state.model_checkpoint_path))
+#            logger.info('Restore from {}'.format(model_path))
+            saver.restore(sess, FLAGS.checkpoint_path)
 
             
             _list = get_images()
