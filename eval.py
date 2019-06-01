@@ -252,21 +252,21 @@ def main(argv=None):
                                     rt_y = lt_y
                                 if lb_x > lt_x:
                                     lb_x = lt_x
-                                if lb_y > rb_y:
+                                if lb_y < rb_y:
                                     lb_y = rb_y
                                 if rb_x < rt_x:
                                     rb_x = rt_x
                                 if rb_y < lb_y:
                                     rb_y = lb_y
-                                padding = 13
-                                lt_x -= padding
-                                lt_y -= padding
-                                lb_x -= padding
-                                lb_y += padding
-                                rt_x += padding
-                                rt_y -= padding
-                                rb_x += padding
-                                rb_y += padding
+#                                 padding = 3
+#                                 lt_x -= padding
+#                                 lt_y -= padding
+#                                 lb_x -= padding
+#                                 lb_y += padding
+#                                 rt_x += padding
+#                                 rt_y -= padding
+#                                 rb_x += padding
+#                                 rb_y += padding
                                 crop_img = im[int(lt_y):int(lb_y), int(lt_x):int(rt_x)]    
                                 cv2.imwrite(os.path.join(FLAGS.output_dir, "crop", ("%d_" % i) + os.path.basename(im_fn)), crop_img[:, :, ::-1])
                     
