@@ -13,6 +13,7 @@ tf.app.flags.DEFINE_string('gpu_list', '0', '')
 tf.app.flags.DEFINE_string('checkpoint_path', './', '')
 tf.app.flags.DEFINE_string('output_dir', './results/', '')
 tf.app.flags.DEFINE_bool('no_write_images', False, 'do not write images')
+tf.app.flags.DEFINE_bool('is_cropping', True, 'do not write images')
 
 from nets import model
 from pse import pse
@@ -230,42 +231,44 @@ def main(argv=None):
 
                             f.write('{},{},{},{},{},{},{},{}\r\n'.format(
                                 box[0, 0], box[0, 1], box[1, 0], box[1, 1], box[2, 0], box[2, 1], box[3, 0], box[3, 1]))
-#                             cv2.polylines(im[:, :, ::-1], [box.astype(np.int32).reshape((-1, 1, 2))], True, color=(255, 255, 0), thickness=2)
-                            lt_x = box[2, 0]
-                            lt_y = box[2, 1]
-                            rt_x = box[3, 0]
-                            rt_y = box[3, 1]
-                            lb_x = box[1, 0]
-                            lb_y = box[1, 1]
-                            rb_x = box[0, 0]   
-                            rb_y = box[0, 1]
-                            if lt_x > lb_x:
-                                lt_x = lb_x
-                            if lt_y > rt_y:
-                                lt_y = rt_y
-                            if rt_x < rb_x:
-                                rt_x = rb_x
-                            if rt_y > lt_y:
-                                rt_y = lt_y
-                            if lb_x > lt_x:
-                                lb_x = lt_x
-                            if lb_y > rb_y:
-                                lb_y = rb_y
-                            if rb_x < rt_x:
-                                rb_x = rt_x
-                            if rb_y < lb_y:
-                                rb_y = lb_y
-                            padding = 13
-                            lt_x -= padding
-                            lt_y -= padding
-                            lb_x -= padding
-                            lb_y += padding
-                            rt_x += padding
-                            rt_y -= padding
-                            rb_x += padding
-                            rb_y += padding
-                            crop_img = im[int(lt_y):int(lb_y), int(lt_x):int(rt_x)]    
-                            cv2.imwrite(os.path.join(FLAGS.output_dir, "crop", ("%d_" % i) + os.path.basename(im_fn)), crop_img)
+                            if not FLAGS.is_cropping: 
+                                cv2.polylines(im[:, :, ::-1], [box.astype(np.int32).reshape((-1, 1, 2))], True, color=(255, 255, 0), thickness=2)
+                            else:
+                                lt_x = box[2, 0]
+                                lt_y = box[2, 1]
+                                rt_x = box[3, 0]
+                                rt_y = box[3, 1]
+                                lb_x = box[1, 0]
+                                lb_y = box[1, 1]
+                                rb_x = box[0, 0]   
+                                rb_y = box[0, 1]
+                                if lt_x > lb_x:
+                                    lt_x = lb_x
+                                if lt_y > rt_y:
+                                    lt_y = rt_y
+                                if rt_x < rb_x:
+                                    rt_x = rb_x
+                                if rt_y > lt_y:
+                                    rt_y = lt_y
+                                if lb_x > lt_x:
+                                    lb_x = lt_x
+                                if lb_y > rb_y:
+                                    lb_y = rb_y
+                                if rb_x < rt_x:
+                                    rb_x = rt_x
+                                if rb_y < lb_y:
+                                    rb_y = lb_y
+                                padding = 13
+                                lt_x -= padding
+                                lt_y -= padding
+                                lb_x -= padding
+                                lb_y += padding
+                                rt_x += padding
+                                rt_y -= padding
+                                rb_x += padding
+                                rb_y += padding
+                                crop_img = im[int(lt_y):int(lb_y), int(lt_x):int(rt_x)]    
+                                cv2.imwrite(os.path.join(FLAGS.output_dir, "crop", ("%d_" % i) + os.path.basename(im_fn)), crop_img)
                     
                 if not FLAGS.no_write_images:
                     img_path = os.path.join(FLAGS.output_dir, os.path.basename(im_fn))
