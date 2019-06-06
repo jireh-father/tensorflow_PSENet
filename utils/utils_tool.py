@@ -1,6 +1,10 @@
 import logging
 from easydict import EasyDict as edict
-import Queue
+import sys
+if sys.version_info[0] < 3:
+    import Queue
+else:
+    import queue as Queue
 import numpy as np
 import cv2
 
